@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { FaLock, FaUser } from 'react-icons/fa';
 
 const AdminLogin = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('admin');
+  const [password, setPassword] = useState('admin123');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
