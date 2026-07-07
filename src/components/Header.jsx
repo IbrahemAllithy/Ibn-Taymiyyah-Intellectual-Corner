@@ -10,12 +10,12 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <img src="/photos/new_logo.png" alt="Logo" className="h-10 md:h-14 w-auto object-contain" />
-          <span className="text-xl md:text-2xl font-bold text-primary font-arabic whitespace-nowrap">زاوية ابن تيمية</span>
+          <img src="/photos/new_logo.png" alt="Logo" className="h-10 lg:h-14 w-auto object-contain" />
+          <span className="text-xl lg:text-2xl font-bold text-primary font-arabic whitespace-nowrap">زاوية ابن تيمية</span>
         </div>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex space-x-6 space-x-reverse items-center">
+        <nav className="hidden lg:flex space-x-6 space-x-reverse items-center">
           <a href="#home" className="text-gray-600 hover:text-secondary font-medium transition-colors">الرئيسية</a>
           <a href="#about" className="text-gray-600 hover:text-secondary font-medium transition-colors">عن المنصة</a>
           <a href="#courses" className="text-gray-600 hover:text-secondary font-medium transition-colors">الدورات</a>
@@ -27,7 +27,7 @@ const Header = () => {
 
         {/* Mobile Toggle */}
         <button 
-          className="md:hidden text-primary text-2xl focus:outline-none p-2"
+          className="lg:hidden text-primary text-2xl focus:outline-none p-2"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
@@ -36,7 +36,7 @@ const Header = () => {
 
       {/* Mobile Nav */}
       {isMobileMenuOpen && (
-        <nav className="md:hidden bg-white border-t border-gray-100 flex flex-col py-4 px-4 space-y-4 shadow-lg absolute w-full">
+        <nav className="lg:hidden bg-white border-t border-gray-100 flex flex-col py-4 px-4 space-y-4 shadow-lg absolute w-full">
           <a href="#home" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-700 font-medium hover:text-secondary">الرئيسية</a>
           <a href="#about" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-700 font-medium hover:text-secondary">عن المنصة</a>
           <a href="#courses" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-700 font-medium hover:text-secondary">الدورات</a>
