@@ -108,6 +108,14 @@ export const CourseProvider = ({ children }) => {
     setCourses(courses.map(c => c.id === id ? updatedCourse : c));
   };
 
+  const addCourse = (newCourse) => {
+    setCourses([{ ...newCourse, id: Date.now() }, ...courses]);
+  };
+
+  const deleteCourse = (id) => {
+    setCourses(courses.filter(c => c.id !== id));
+  };
+
   const addBanner = (banner) => {
     setBanners([...banners, { ...banner, id: Date.now() }]);
   };
@@ -117,7 +125,7 @@ export const CourseProvider = ({ children }) => {
   };
 
   return (
-    <CourseContext.Provider value={{ courses, updateCourse, banners, addBanner, toggleBanner }}>
+    <CourseContext.Provider value={{ courses, updateCourse, addCourse, deleteCourse, banners, addBanner, toggleBanner }}>
       {children}
     </CourseContext.Provider>
   );
