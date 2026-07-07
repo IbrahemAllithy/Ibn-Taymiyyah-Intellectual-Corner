@@ -16,7 +16,7 @@ const Hero = () => {
             منصة تعليمية رائدة تهدف إلى بناء عقلية إسلامية رصينة قادرة على مواجهة الشبهات المعاصرة وفهم التراث بعمق من خلال دراسات نقدية وعقدية متينة.
           </p>
           <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
-            <a href="#courses" className="bg-secondary text-white px-8 py-3 rounded-full font-bold hover:bg-yellow-600 transition-all shadow-lg transform hover:-translate-y-1 text-lg">
+            <a href="#courses" className="bg-secondary text-white px-8 py-3 rounded-full font-bold hover:bg-blue-700 transition-all shadow-lg transform hover:-translate-y-1 text-lg">
               تصفح الدورات
             </a>
             <a href="#about" className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white hover:text-primary transition-all text-lg">

@@ -8,9 +8,9 @@ export default {
     extend: {
       colors: {
         primary: '#1E3A8A', // Deep Blue
-        secondary: '#D97706', // Gold / Amber
+        secondary: '#3B82F6', // Blue 500
         dark: '#111827',
-        light: '#F9FAFB'
+        light: '#F3F4F6'
       },
       fontFamily: {
         arabic: ['"Tajawal"', 'sans-serif'],

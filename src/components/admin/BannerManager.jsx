@@ -55,7 +55,7 @@ const BannerManager = () => {
               />
             </div>
           </div>
-          <button type="submit" className="bg-secondary text-white px-6 py-2 rounded-lg font-bold hover:bg-yellow-600 transition-colors">
+          <button type="submit" className="bg-secondary text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors">
             حفظ الإعلان
           </button>
         </form>

@@ -20,7 +20,7 @@ const Header = () => {
           <a href="#about" className="text-gray-600 hover:text-secondary font-medium transition-colors">عن المنصة</a>
           <a href="#courses" className="text-gray-600 hover:text-secondary font-medium transition-colors">الدورات</a>
           <a href="#features" className="text-gray-600 hover:text-secondary font-medium transition-colors">المميزات</a>
-          <a href="#courses" className="bg-secondary text-white px-6 py-2 rounded-full font-bold hover:bg-yellow-600 transition-colors shadow-md mr-4">
+          <a href="#courses" className="bg-secondary text-white px-6 py-2 rounded-full font-bold hover:bg-blue-700 transition-colors shadow-md mr-4">
             استكشف الدورات
           </a>
         </nav>
@@ -41,7 +41,7 @@ const Header = () => {
           <a href="#about" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-700 font-medium hover:text-secondary">عن المنصة</a>
           <a href="#courses" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-700 font-medium hover:text-secondary">الدورات</a>
           <a href="#features" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-700 font-medium hover:text-secondary">المميزات</a>
-          <a href="#courses" onClick={() => setIsMobileMenuOpen(false)} className="bg-secondary text-white text-center px-6 py-3 rounded-full font-bold hover:bg-yellow-600 shadow-md mt-2">
+          <a href="#courses" onClick={() => setIsMobileMenuOpen(false)} className="bg-secondary text-white text-center px-6 py-3 rounded-full font-bold hover:bg-blue-700 shadow-md mt-2">
             استكشف الدورات
           </a>
         </nav>
