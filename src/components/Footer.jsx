@@ -34,7 +34,6 @@ const Footer = () => {
               <li><a href="#about" className="hover:text-secondary transition-colors">عن المنصة</a></li>
               <li><a href="#courses" className="hover:text-secondary transition-colors">الدورات</a></li>
               <li><a href="#features" className="hover:text-secondary transition-colors">المميزات</a></li>
-              <li><Link to="/admin/login" className="hover:text-secondary transition-colors">دخول الإدارة</Link></li>
             </ul>
           </div>
 
