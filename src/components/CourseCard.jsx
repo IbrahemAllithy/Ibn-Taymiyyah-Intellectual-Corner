@@ -32,8 +32,8 @@ const CourseCard = ({ course }) => {
           </div>
           
           <div className="flex justify-between items-center mb-6">
-            <span className="text-2xl font-bold text-primary">
-              {course.price === 'مجاني' ? <span className="text-green-600">مجاني</span> : course.price}
+            <span className="text-sm font-bold text-secondary bg-blue-50 px-3 py-1 rounded-full">
+              {course.price === 'مجاني' ? <span className="text-green-600">مجاني</span> : 'للاستفسار عن الرسوم'}
             </span>
             <div className="flex items-center gap-1 text-yellow-500">
               <FaStar />
