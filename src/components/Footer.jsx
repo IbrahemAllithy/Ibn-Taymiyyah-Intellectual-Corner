@@ -10,20 +10,14 @@ const Footer = () => {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-6">
-              <FaBookOpen className="text-secondary text-3xl" />
+              <img src="/photos/new_logo.png" alt="Logo" className="h-10 w-auto object-contain" />
               <span className="text-2xl font-bold text-white font-arabic">زاوية ابن تيمية</span>
             </div>
-            <p className="text-gray-400 mb-6 text-sm leading-relaxed">
+            <p className="text-sm leading-relaxed mb-6">
               منصة تعليمية رائدة تهدف إلى بناء عقلية إسلامية رصينة قادرة على مواجهة الشبهات المعاصرة وفهم التراث بعمق.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-secondary hover:text-white transition-colors">
-                <FaTwitter />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-secondary hover:text-white transition-colors">
-                <FaYoutube />
-              </a>
-              <a href="https://t.me/Schneizel1Bot" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-[#0088cc] hover:text-white transition-colors">
+              <a href="https://t.me/Schneizel1Bot" target="_blank" rel="noopener noreferrer" className="bg-gray-800 hover:bg-secondary w-10 h-10 rounded-full flex items-center justify-center transition-colors text-white">
                 <FaTelegramPlane />
               </a>
             </div>
