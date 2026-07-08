@@ -1,6 +1,5 @@
 import React from 'react';
-import { FaBookOpen, FaTelegramPlane, FaTwitter, FaYoutube } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { FaTelegramPlane } from 'react-icons/fa';
 
 const Footer = () => {
   return (

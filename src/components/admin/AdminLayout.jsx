@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaHome, FaBook, FaBullhorn, FaSignOutAlt, FaCog, FaBars, FaTimes } from 'react-icons/fa';
 
 const AdminLayout = ({ children }) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleLogout = () => {
