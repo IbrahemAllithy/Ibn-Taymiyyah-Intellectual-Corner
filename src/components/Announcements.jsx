@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { CourseContext } from '../context/CourseContext';
 import CourseCard from './CourseCard';
-import { FaBullhorn, FaSparkles } from 'react-icons/fa';
+import { FaBullhorn, FaStar } from 'react-icons/fa';
 
 const Announcements = () => {
   const { courses, banners, loading } = useContext(CourseContext);
@@ -39,7 +39,7 @@ const Announcements = () => {
               <div key={banner.id} className="bg-white rounded-2xl shadow-lg border-r-4 border-secondary p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transform hover:-translate-y-1 transition-transform duration-300">
                 <div className="flex items-center gap-4">
                   <div className="bg-blue-100 text-secondary w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-                    <FaSparkles className="text-xl" />
+                    <FaStar className="text-xl" />
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-gray-800 mb-1">{banner.title}</h3>
