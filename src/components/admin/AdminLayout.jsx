@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaHome, FaBook, FaBullhorn, FaSignOutAlt, FaCog, FaBars, FaTimes } from 'react-icons/fa';
+import { supabase } from '../../lib/supabase';
 
 const AdminLayout = ({ children }) => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     localStorage.removeItem('isAdmin');
     navigate('/admin/login');
   };
