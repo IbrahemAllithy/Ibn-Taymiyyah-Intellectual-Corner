@@ -37,13 +37,17 @@ const Announcements = () => {
           <div className="mb-12 space-y-4 max-w-4xl mx-auto">
             {activeBanners.map(banner => (
               <div key={banner.id} className="bg-white rounded-2xl shadow-lg border-r-4 border-secondary p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transform hover:-translate-y-1 transition-transform duration-300">
-                <div className="flex items-center gap-4">
-                  <div className="bg-blue-100 text-secondary w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-                    <FaStar className="text-xl" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-800 mb-1">{banner.title}</h3>
-                    <p className="text-gray-600">{banner.message}</p>
+                <div className="flex flex-col sm:flex-row items-center gap-6 w-full">
+                  {banner.image_url ? (
+                    <img src={banner.image_url} alt={banner.title} className="w-full sm:w-32 h-32 object-cover rounded-xl shadow-sm flex-shrink-0" />
+                  ) : (
+                    <div className="bg-blue-100 text-secondary w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
+                      <FaStar className="text-2xl" />
+                    </div>
+                  )}
+                  <div className="text-center sm:text-right flex-1">
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">{banner.title}</h3>
+                    <p className="text-gray-600 leading-relaxed">{banner.message}</p>
                   </div>
                 </div>
               </div>

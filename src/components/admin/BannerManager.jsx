@@ -1,17 +1,47 @@
 import React, { useContext, useState } from 'react';
 import { CourseContext } from '../../context/CourseContext';
-import { FaPlus, FaToggleOn, FaToggleOff } from 'react-icons/fa';
+import { supabase } from '../../lib/supabase';
+import { FaPlus, FaToggleOn, FaToggleOff, FaImage, FaSpinner } from 'react-icons/fa';
 
 const BannerManager = () => {
   const { banners, addBanner, toggleBanner } = useContext(CourseContext);
-  const [newBanner, setNewBanner] = useState({ title: '', message: '', is_active: true });
+  const [newBanner, setNewBanner] = useState({ title: '', message: '', image_url: '', is_active: true });
   const [isAdding, setIsAdding] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `banner_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('course-images')
+        .upload(filePath, file);
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      const { data } = supabase.storage.from('course-images').getPublicUrl(filePath);
+      setNewBanner({...newBanner, image_url: data.publicUrl});
+    } catch (error) {
+      console.error('Error uploading banner image:', error);
+      alert('حدث خطأ أثناء رفع الصورة');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if(newBanner.title && newBanner.message) {
       addBanner(newBanner);
-      setNewBanner({ title: '', message: '', is_active: true });
+      setNewBanner({ title: '', message: '', image_url: '', is_active: true });
       setIsAdding(false);
     }
   };
@@ -55,7 +85,34 @@ const BannerManager = () => {
               />
             </div>
           </div>
-          <button type="submit" className="bg-secondary text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors">
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">صورة الإعلان (اختياري)</label>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors relative cursor-pointer group">
+              {uploading ? (
+                <div className="flex flex-col items-center">
+                  <FaSpinner className="animate-spin text-xl text-primary mb-2" />
+                  <span className="text-xs">جاري الرفع...</span>
+                </div>
+              ) : newBanner.image_url ? (
+                <img src={newBanner.image_url} alt="Preview" className="h-20 object-contain mb-2 rounded shadow-sm" />
+              ) : (
+                <FaImage className="text-2xl mb-2 text-gray-300 group-hover:text-primary transition-colors" />
+              )}
+              
+              {!uploading && (
+                <>
+                  <span className="text-xs font-medium">{newBanner.image_url ? 'اضغط لتغيير الصورة' : 'اضغط لاختيار صورة للإعلان'}</span>
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    onChange={handleImageUpload}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  />
+                </>
+              )}
+            </div>
+          </div>
+          <button type="submit" disabled={uploading} className="bg-secondary text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors disabled:opacity-50">
             حفظ الإعلان
           </button>
         </form>
