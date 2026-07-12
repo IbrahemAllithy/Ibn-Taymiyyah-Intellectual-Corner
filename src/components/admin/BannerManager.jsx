@@ -4,14 +4,14 @@ import { FaPlus, FaToggleOn, FaToggleOff } from 'react-icons/fa';
 
 const BannerManager = () => {
   const { banners, addBanner, toggleBanner } = useContext(CourseContext);
-  const [newBanner, setNewBanner] = useState({ title: '', message: '', isActive: true });
+  const [newBanner, setNewBanner] = useState({ title: '', message: '', is_active: true });
   const [isAdding, setIsAdding] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if(newBanner.title && newBanner.message) {
       addBanner(newBanner);
-      setNewBanner({ title: '', message: '', isActive: true });
+      setNewBanner({ title: '', message: '', is_active: true });
       setIsAdding(false);
     }
   };
@@ -63,22 +63,22 @@ const BannerManager = () => {
 
       <div className="space-y-4">
         {banners.map(banner => (
-          <div key={banner.id} className={`flex items-center justify-between p-4 rounded-xl border ${banner.isActive ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50'}`}>
+          <div key={banner.id} className={`flex items-center justify-between p-4 rounded-xl border ${banner.is_active ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50'}`}>
             <div>
               <h4 className="font-bold text-gray-800 flex items-center gap-2">
                 {banner.title}
-                <span className={`text-xs px-2 py-1 rounded-full ${banner.isActive ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}`}>
-                  {banner.isActive ? 'نشط' : 'غير نشط'}
+                <span className={`text-xs px-2 py-1 rounded-full ${banner.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}`}>
+                  {banner.is_active ? 'نشط' : 'غير نشط'}
                 </span>
               </h4>
               <p className="text-sm text-gray-600 mt-1">{banner.message}</p>
             </div>
             <button 
               onClick={() => toggleBanner(banner.id)}
-              className={`text-3xl ${banner.isActive ? 'text-green-500' : 'text-gray-400'}`}
-              title={banner.isActive ? 'إيقاف' : 'تفعيل'}
+              className={`text-3xl ${banner.is_active ? 'text-green-500' : 'text-gray-400'}`}
+              title={banner.is_active ? 'إيقاف' : 'تفعيل'}
             >
-              {banner.isActive ? <FaToggleOn /> : <FaToggleOff />}
+              {banner.is_active ? <FaToggleOn /> : <FaToggleOff />}
             </button>
           </div>
         ))}

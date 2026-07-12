@@ -1,32 +1,52 @@
 import React, { useContext, useState } from 'react';
 import { CourseContext } from '../../context/CourseContext';
-import { FaEdit, FaSave, FaTimes, FaTrash, FaPlus, FaImage } from 'react-icons/fa';
+import { supabase } from '../../lib/supabase';
+import { FaEdit, FaSave, FaTimes, FaTrash, FaPlus, FaImage, FaSpinner } from 'react-icons/fa';
 
 const CourseManager = () => {
   const { courses, updateCourse, addCourse, deleteCourse } = useContext(CourseContext);
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({});
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  
   const [newCourse, setNewCourse] = useState({
     title: '',
     instructor: '',
     price: '',
     category: '',
     description: '',
-    telegramLink: '',
-    image: '',
+    telegram_link: '',
+    image_url: '',
     type: 'premium',
     rating: 5.0
   });
 
-  const handleImageUpload = (e, callback) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        callback(reader.result);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('course-images')
+        .upload(filePath, file);
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      const { data } = supabase.storage.from('course-images').getPublicUrl(filePath);
+      setNewCourse({...newCourse, image_url: data.publicUrl});
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('حدث خطأ أثناء رفع الصورة');
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -42,10 +62,14 @@ const CourseManager = () => {
 
   const handleAddCourse = (e) => {
     e.preventDefault();
+    if (!newCourse.image_url) {
+      alert("الرجاء انتظار رفع الصورة");
+      return;
+    }
     addCourse(newCourse);
     setIsAddModalOpen(false);
     setNewCourse({
-      title: '', instructor: '', price: '', category: '', description: '', telegramLink: '', image: '', type: 'premium', rating: 5.0
+      title: '', instructor: '', price: '', category: '', description: '', telegram_link: '', image_url: '', type: 'premium', rating: 5.0
     });
   };
 
@@ -80,7 +104,7 @@ const CourseManager = () => {
               {courses.map(course => (
                 <tr key={course.id} className="hover:bg-gray-50 transition-colors">
                   <td className="py-4 px-6 w-20">
-                    <img src={course.image} alt="" className="w-12 h-12 object-cover rounded-md shadow-sm" />
+                    <img src={course.image_url} alt="" className="w-12 h-12 object-cover rounded-md shadow-sm bg-gray-200" />
                   </td>
                   <td className="py-4 px-6">
                     {editingId === course.id ? (
@@ -97,7 +121,6 @@ const CourseManager = () => {
                     )}
                   </td>
                   
-                  {/* Price Column */}
                   <td className="py-4 px-6">
                     {editingId === course.id ? (
                       <input 
@@ -113,7 +136,6 @@ const CourseManager = () => {
                     )}
                   </td>
   
-                  {/* Actions Column */}
                   <td className="py-4 px-6 text-center">
                     {editingId === course.id ? (
                       <div className="flex items-center justify-center gap-3">
@@ -142,7 +164,6 @@ const CourseManager = () => {
         </div>
       </div>
 
-      {/* Add Course Modal */}
       {isAddModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-60 backdrop-blur-sm" onClick={() => setIsAddModalOpen(false)}>
           <div 
@@ -178,25 +199,35 @@ const CourseManager = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-1">رابط التيليجرام للاستفسار</label>
-                  <input required type="url" value={newCourse.telegramLink} onChange={e => setNewCourse({...newCourse, telegramLink: e.target.value})} className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-primary dir-ltr text-left" placeholder="https://t.me/..." />
+                  <input required type="url" value={newCourse.telegram_link} onChange={e => setNewCourse({...newCourse, telegram_link: e.target.value})} className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-primary dir-ltr text-left" placeholder="https://t.me/..." />
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1">صورة الدورة</label>
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors relative cursor-pointer group">
-                  {newCourse.image ? (
-                    <img src={newCourse.image} alt="Preview" className="h-32 object-contain mb-2 rounded shadow-sm" />
+                  {uploading ? (
+                    <div className="flex flex-col items-center">
+                      <FaSpinner className="animate-spin text-3xl text-primary mb-2" />
+                      <span className="text-sm">جاري الرفع...</span>
+                    </div>
+                  ) : newCourse.image_url ? (
+                    <img src={newCourse.image_url} alt="Preview" className="h-32 object-contain mb-2 rounded shadow-sm" />
                   ) : (
                     <FaImage className="text-4xl mb-3 text-gray-300 group-hover:text-primary transition-colors" />
                   )}
-                  <span className="text-sm font-medium">{newCourse.image ? 'اضغط لتغيير الصورة' : 'اضغط لاختيار صورة الدورة من جهازك'}</span>
-                  <input 
-                    type="file" 
-                    accept="image/*" 
-                    onChange={(e) => handleImageUpload(e, (base64) => setNewCourse({...newCourse, image: base64}))}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                    required={!newCourse.image}
-                  />
+                  
+                  {!uploading && (
+                    <>
+                      <span className="text-sm font-medium">{newCourse.image_url ? 'اضغط لتغيير الصورة' : 'اضغط لاختيار صورة الدورة من جهازك'}</span>
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={handleImageUpload}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        required={!newCourse.image_url}
+                      />
+                    </>
+                  )}
                 </div>
               </div>
               <div>
@@ -206,7 +237,7 @@ const CourseManager = () => {
 
               <div className="pt-4 flex justify-end gap-3 border-t border-gray-100">
                 <button type="button" onClick={() => setIsAddModalOpen(false)} className="px-6 py-2 rounded-lg font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors">إلغاء</button>
-                <button type="submit" className="px-6 py-2 rounded-lg font-bold text-white bg-primary hover:bg-blue-900 transition-colors">إضافة الدورة</button>
+                <button type="submit" disabled={uploading} className="px-6 py-2 rounded-lg font-bold text-white bg-primary hover:bg-blue-900 transition-colors disabled:opacity-50">إضافة الدورة</button>
               </div>
             </form>
           </div>

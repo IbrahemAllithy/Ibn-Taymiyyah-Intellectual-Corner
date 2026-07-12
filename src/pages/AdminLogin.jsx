@@ -1,22 +1,33 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaLock, FaUser } from 'react-icons/fa';
+import { supabase } from '../lib/supabase';
 
 const AdminLogin = () => {
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('admin123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Dummy authentication
-    if (username === 'admin' && password === 'admin123') {
-      localStorage.setItem('isAdmin', 'true');
-      navigate('/admin');
+    setLoading(true);
+    setError('');
+    
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+
+    if (error) {
+      setError('بيانات الدخول غير صحيحة، أو الحساب غير موجود.');
     } else {
-      setError('بيانات الدخول غير صحيحة. (استخدم admin / admin123)');
+      // successful login
+      localStorage.setItem('isAdmin', 'true'); // Keep this for now or rely on auth state
+      navigate('/admin');
     }
+    setLoading(false);
   };
 
   return (
@@ -33,17 +44,19 @@ const AdminLogin = () => {
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2">اسم المستخدم</label>
+            <label className="block text-gray-700 text-sm font-bold mb-2">البريد الإلكتروني</label>
             <div className="relative">
               <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400">
                 <FaUser />
               </span>
               <input 
-                type="text" 
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full pl-3 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                placeholder="admin"
+                type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full pl-3 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-left"
+                placeholder="admin@example.com"
+                dir="ltr"
+                required
               />
             </div>
           </div>
@@ -57,13 +70,19 @@ const AdminLogin = () => {
                 type="password" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-3 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                placeholder="admin123"
+                className="w-full pl-3 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-left"
+                placeholder="••••••••"
+                dir="ltr"
+                required
               />
             </div>
           </div>
-          <button type="submit" className="w-full bg-primary hover:bg-blue-900 text-white font-bold py-3 rounded-lg transition-colors">
-            دخول
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="w-full bg-primary hover:bg-blue-900 text-white font-bold py-3 rounded-lg transition-colors disabled:opacity-50"
+          >
+            {loading ? 'جاري التحقق...' : 'دخول'}
           </button>
         </form>
         <div className="mt-6 text-center">

@@ -12,7 +12,7 @@ const CourseCard = ({ course }) => {
         onClick={() => setIsModalOpen(true)}
       >
         <div className="relative h-48">
-          <img src={course.image} alt={course.title} className="w-full h-full object-cover" />
+          <img src={course.image_url} alt={course.title} className="w-full h-full object-cover" />
           <div className="absolute top-4 right-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
             {course.category}
           </div>
@@ -44,7 +44,7 @@ const CourseCard = ({ course }) => {
             onClick={e => e.stopPropagation()}
           >
             <div className="relative h-48 sm:h-64 flex-shrink-0">
-              <img src={course.image} alt={course.title} className="w-full h-full object-cover" />
+              <img src={course.image_url} alt={course.title} className="w-full h-full object-cover" />
               <button 
                 className="absolute top-4 left-4 bg-white text-gray-800 p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors"
                 onClick={() => setIsModalOpen(false)}
@@ -81,7 +81,7 @@ const CourseCard = ({ course }) => {
                 </div>
 
                 <a 
-                  href={course.telegramLink} 
+                  href={course.telegram_link} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto flex items-center justify-center gap-2 bg-primary hover:bg-blue-900 text-white px-8 py-3 rounded-lg font-bold transition-colors"

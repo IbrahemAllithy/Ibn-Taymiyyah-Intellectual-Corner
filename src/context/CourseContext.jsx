@@ -1,131 +1,71 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 
 export const CourseContext = createContext();
 
 export const CourseProvider = ({ children }) => {
-  const [courses, setCourses] = useState([
-    {
-      id: 1,
-      title: "دراسة تحليلية لعقيدة الفخر الرازي - كتاب الأربعين نموذجا",
-      instructor: "أستاذ المادة",
-      price: "150$",
-      rating: 4.8,
-      category: "عقيدة",
-      type: "premium",
-      telegramLink: "https://t.me/Schneizel1Bot",
-      image: "/photos/photo_2025-05-31_20-12-07.jpg",
-      description: "دراسة الجانب العقدي الكلامي في فكر فخر الدين الرازي من الأهمية بمكان..."
-    },
-    {
-      id: 2,
-      title: "خريطة نظرية المعرفة الشاملة ، و تحقيق مواضيعها الهامة",
-      instructor: "أستاذ المادة",
-      price: "120$",
-      rating: 4.9,
-      category: "فلسفة ومعرفة",
-      type: "premium",
-      telegramLink: "https://t.me/Schneizel1Bot",
-      image: "/photos/photo_2025-05-31_21-03-30.jpg",
-      description: "دراسة و مقدمة مفصلة لمواضيع هذا العلم و الإحاطة بمسائله."
-    },
-    {
-      id: 3,
-      title: "أدلة القرآن الكريم العقلية: في ضوء نظرية المعرفة",
-      instructor: "د. غازي أحمد",
-      price: "مجاني",
-      rating: 5.0,
-      category: "تفسير وعقيدة",
-      type: "free",
-      telegramLink: "https://t.me/Schneizel1Bot",
-      image: "/photos/photo_2025-05-31_21-08-51.jpg",
-      description: "الكشف عن تضمن القرآن الكريم لبراهين عقلية يقينية تجيب عن الأسئلة الوجودية الكبرى."
-    },
-    {
-      id: 4,
-      title: "علم الكلام، شرح متن الوسطى للسنوسي المالكي",
-      instructor: "أ. محمود سامح",
-      price: "80$",
-      rating: 4.7,
-      category: "علم الكلام",
-      type: "premium",
-      telegramLink: "https://t.me/Schneizel1Bot",
-      image: "/photos/photo_2026-05-25_21-06-27.jpg",
-      description: "إطلاع الطالب على مسائل علم الكلام، وتصويرها له من خلال متن الوسطى."
-    },
-    {
-      id: 5,
-      title: "الحركة وأحكامها",
-      instructor: "أستاذ المادة",
-      price: "100$",
-      rating: 4.6,
-      category: "طبيعيات وإلهيات",
-      type: "premium",
-      telegramLink: "https://t.me/Schneizel1Bot",
-      image: "/photos/photo_2026-05-25_21-07-15.jpg",
-      description: "تُعدُّ الدورة مقدمة هامة في كثير من القضايا الإلهية سواء في وجود الله كدليل الحركة أو أفعال الواجب."
-    },
-    {
-      id: 6,
-      title: "علم الكلام، شرح متن الصغرى (أم البراهين) للسنوسي المالكي",
-      instructor: "أستاذ المادة",
-      price: "مجاني",
-      rating: 4.8,
-      category: "علم الكلام",
-      type: "free",
-      telegramLink: "https://t.me/Schneizel1Bot",
-      image: "/photos/photo_2026-05-25_21-08-14.jpg",
-      description: "إطلاع الطالب على مسائل علم الكلام، وتصويرها له، من خلال أم البراهين."
-    },
-    {
-      id: 7,
-      title: "النبوة وإعجاز القرآن في ضوء نظرية المعرفة، ورد شبهات الملاحدة عنها",
-      instructor: "د. غازي أحمد",
-      price: "140$",
-      rating: 4.9,
-      category: "عقيدة",
-      type: "premium",
-      telegramLink: "https://t.me/Schneizel1Bot",
-      image: "/photos/photo_2026-06-15_19-00-39.jpg",
-      description: "الهدف من هذه الدورة هو تعقل المعجزات بعامة وإعجاز القرآن البياني وغير البياني."
-    },
-    {
-      id: 8,
-      title: "مدخل مفصل إلى فلسفة العلوم",
-      instructor: "أستاذ المادة",
-      price: "مجاني",
-      rating: 4.7,
-      category: "فلسفة",
-      type: "free",
-      telegramLink: "https://t.me/Schneizel1Bot",
-      image: "/photos/photo_2026-06-16_19-37-10.jpg",
-      description: "معرفة ما هو هذا العلم و الإلمام بمواضيعه من الناحية المنهجية و المعرفية و المنطقية."
-    }
-  ]);
-
+  const [courses, setCourses] = useState([]);
   const [banners, setBanners] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const updateCourse = (id, updatedCourse) => {
-    setCourses(courses.map(c => c.id === id ? updatedCourse : c));
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const { data: coursesData } = await supabase.from('courses').select('*').order('created_at', { ascending: false });
+      const { data: bannersData } = await supabase.from('banners').select('*').order('created_at', { ascending: false });
+      
+      if (coursesData) setCourses(coursesData);
+      if (bannersData) setBanners(bannersData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const addCourse = (newCourse) => {
-    setCourses([{ ...newCourse, id: Date.now() }, ...courses]);
+  const updateCourse = async (id, updatedCourse) => {
+    const { data, error } = await supabase.from('courses').update(updatedCourse).eq('id', id).select();
+    if (data && data.length > 0) {
+      setCourses(courses.map(c => c.id === id ? data[0] : c));
+    }
   };
 
-  const deleteCourse = (id) => {
-    setCourses(courses.filter(c => c.id !== id));
+  const addCourse = async (newCourse) => {
+    const { data, error } = await supabase.from('courses').insert([newCourse]).select();
+    if (data && data.length > 0) {
+      setCourses([data[0], ...courses]);
+    }
   };
 
-  const addBanner = (banner) => {
-    setBanners([...banners, { ...banner, id: Date.now() }]);
+  const deleteCourse = async (id) => {
+    const { error } = await supabase.from('courses').delete().eq('id', id);
+    if (!error) {
+      setCourses(courses.filter(c => c.id !== id));
+    }
   };
 
-  const toggleBanner = (id) => {
-    setBanners(banners.map(b => b.id === id ? { ...b, isActive: !b.isActive } : b));
+  const addBanner = async (banner) => {
+    const { data, error } = await supabase.from('banners').insert([banner]).select();
+    if (data && data.length > 0) {
+      setBanners([data[0], ...banners]);
+    }
+  };
+
+  const toggleBanner = async (id) => {
+    const banner = banners.find(b => b.id === id);
+    if (!banner) return;
+    const { data, error } = await supabase.from('banners').update({ is_active: !banner.is_active }).eq('id', id).select();
+    if (data && data.length > 0) {
+      setBanners(banners.map(b => b.id === id ? data[0] : b));
+    }
   };
 
   return (
-    <CourseContext.Provider value={{ courses, updateCourse, addCourse, deleteCourse, banners, addBanner, toggleBanner }}>
+    <CourseContext.Provider value={{ courses, updateCourse, addCourse, deleteCourse, banners, addBanner, toggleBanner, loading, refreshData: fetchData }}>
       {children}
     </CourseContext.Provider>
   );
